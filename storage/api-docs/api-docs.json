@@ -1,0 +1,407 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mars Rover API Documentation",
+        "description": "You can create and manage plateaus and rovers with RESTful endpoints.",
+        "termsOfService": "http://127.0.0.1:8000/api/v1/terms",
+        "contact": {
+            "email": "tarikunal3193@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/",
+            "description": "Laravel Mars Rover API Stage Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/plateau": {
+            "post": {
+                "tags": [
+                    "plateau"
+                ],
+                "summary": "Create a plateau",
+                "operationId": "createPlateau",
+                "requestBody": {
+                    "description": "create a plateau",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "schema": "createPlateau",
+                                "required": [
+                                    "x",
+                                    "y"
+                                ],
+                                "properties": {
+                                    "x": {
+                                        "description": "x value of plateau",
+                                        "type": "integer"
+                                    },
+                                    "y": {
+                                        "description": "y value of plateau",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Plateau created response"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plateau/{id}": {
+            "get": {
+                "tags": [
+                    "plateau"
+                ],
+                "summary": "Get plateau info for a specific plateau",
+                "operationId": "getPlateau",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the plateau",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "plateau details response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/rover": {
+            "post": {
+                "tags": [
+                    "rover"
+                ],
+                "summary": "Create a rover",
+                "operationId": "createRover",
+                "requestBody": {
+                    "description": "create a rover",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "schema": "createRover",
+                                "required": [
+                                    "plateau_id",
+                                    "x",
+                                    "y",
+                                    "heading"
+                                ],
+                                "properties": {
+                                    "plateau_id": {
+                                        "description": "the plateau id which rover is currently in",
+                                        "type": "integer"
+                                    },
+                                    "x": {
+                                        "description": "x coordinate of rover",
+                                        "type": "integer"
+                                    },
+                                    "y": {
+                                        "description": "y coordinate of rover",
+                                        "type": "integer"
+                                    },
+                                    "heading": {
+                                        "description": "current heading of rover",
+                                        "type": "enum"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rover created response"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/rover/{id}": {
+            "get": {
+                "tags": [
+                    "rover"
+                ],
+                "summary": "Get rover info for a specific rover",
+                "operationId": "getRover",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the rover",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "rover details response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/rover-state/{id}": {
+            "get": {
+                "tags": [
+                    "rover"
+                ],
+                "summary": "Get rover state for a specific rover",
+                "operationId": "getRoverState",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the rover",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "rover state response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/move-rover/{id}": {
+            "post": {
+                "tags": [
+                    "rover"
+                ],
+                "summary": "move a rover",
+                "operationId": "moveRover",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the rover",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "move a rover",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "schema": "moveRover",
+                                "required": [
+                                    "commands"
+                                ],
+                                "properties": {
+                                    "commands": {
+                                        "description": "the commands to move the rover",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rover current state response"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Plateau": {
+                "title": "Plateau",
+                "description": "Plateau model",
+                "required": [
+                    "id",
+                    "x",
+                    "y"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "id column",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x": {
+                        "description": "x value of plateau",
+                        "type": "integer"
+                    },
+                    "y": {
+                        "description": "y value of plateau",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Rover": {
+                "title": "Rover",
+                "description": "Rover model",
+                "required": [
+                    "id",
+                    "plateau_id",
+                    "x",
+                    "y",
+                    "heading"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "id column",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "plateau_id": {
+                        "description": "the plateau id which rover is currently in",
+                        "type": "integer"
+                    },
+                    "x": {
+                        "description": "x coordinate of rover",
+                        "type": "integer"
+                    },
+                    "y": {
+                        "description": "y coordinate of rover",
+                        "type": "integer"
+                    },
+                    "heading": {
+                        "description": "current heading of rover",
+                        "type": "enum"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "plateau",
+            "description": "plateau endpoints",
+            "externalDocs": {
+                "description": "find out more",
+                "url": "https://www.tarikunal.com"
+            }
+        },
+        {
+            "name": "rover",
+            "description": "rover endpoints",
+            "externalDocs": {
+                "description": "find out more",
+                "url": "https://www.tarikunal.com"
+            }
+        }
+    ],
+    "externalDocs": {
+        "description": "Find out more about Laravel Mars Rover API",
+        "url": "https://www.tarikunal.com"
+    },
+    "security": [
+        []
+    ]
+}
