@@ -9,17 +9,26 @@ use App\Http\Requests\CreatePlateauRequest;
 
 class PlateauController extends Controller
 {
+
+
+    protected $plateau;
+
+    public function __construct(Plateau $plateau)
+    {
+        $this->plateau = $plateau;
+    }
+
     public function createPlateau(CreatePlateauRequest $request) {
 
         $plateauData = $request->only('x', 'y');
 
 
-        $plateau = new Plateau;
-        $newplateau = $plateau->createPlateau($plateauData);
+       
+        $newPlateau = $this->plateau->createPlateau($plateauData);
 
         return response()->json([
             'message' => 'success',
-            'data' => $newplateau
+            'data' => $newPlateau
 
         ], 201);
 
@@ -27,12 +36,11 @@ class PlateauController extends Controller
 
     public function getPlateau($id) {
 
-        $newplateau = new Plateau;
-        $plateau = $newplateau->getPlateau($id);
+        $currentPlateau = $this->plateau->getPlateau($id);
         
 
-        if(count($plateau) > 0) {
-            return response()->json($plateau, 200);
+        if(count($currentPlateau) > 0) {
+            return response()->json($currentPlateau, 200);
         } else {
             return response()->json(['message' => 'Plateau not found'], 404);
         }

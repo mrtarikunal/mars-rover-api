@@ -12,20 +12,29 @@ use App\Http\Requests\MoveRoverRequest;
 
 class RoverController extends Controller
 {
+
+    protected $plateau;
+    protected $rover;
+
+    public function __construct(Rover $rover, Plateau $plateau)
+    {
+        $this->plateau = $plateau;
+        $this->rover = $rover;
+    }
+
     public function createRover(CreateRoverRequest $request) {
 
         $roverData = $request->only('plateau_id', 'x', 'y', 'heading');
 
-        $rover = new Rover;
-        $newrover = $rover->createRover($roverData);
+        $newRover = $this->rover->createRover($roverData);
 
-        if(!$newrover) {
+        if(!$newRover) {
             return response()->json(['message' => 'Please enter valid x and y coordinates'], 400);
         }
 
         return response()->json([
             'message' => 'success',
-            'data' => $newrover
+            'data' => $newRover
 
         ], 201);
 
@@ -33,11 +42,11 @@ class RoverController extends Controller
 
     public function getRover($id) {
 
-        $newrover = new Rover;
-        $rover = $newrover->getRover($id);
 
-        if (count($rover) > 0) {
-            return response()->json($rover, 200);
+        $newRover = $this->rover->getRover($id);
+
+        if (count($newRover) > 0) {
+            return response()->json($newRover, 200);
         } else {
             return response()->json(['message' => 'Rover not found'], 404);
         }
@@ -46,8 +55,7 @@ class RoverController extends Controller
 
     public function getRoverState($id) {
 
-        $rover = new Rover;
-        $state = $rover->getRoverState($id);
+        $state = $this->rover->getRoverState($id);
 
 
         if (count($state) > 0) {
@@ -60,32 +68,29 @@ class RoverController extends Controller
 
     public function moveRover(MoveRoverRequest $request, $id) {
 
-        $newrover = new Rover;
-        $rover = $newrover->getRoverForMove($id);
+        $newRover = $this->rover->getRoverForMove($id);
 
-        $newplateau = new Plateau;
-        $plateau = $newplateau->getPlateau($rover['plateau_id']);
+        $newPlateau = $this->plateau->getPlateau($newRover['plateau_id']);
 
         $str = $request->commands;
 
-        $moveRover = new MoveRover($str, $rover, $plateau);
+        $moveRover = new MoveRover($str, $newRover, $newPlateau);
 
-        $rover = $moveRover->move();
+        $movedRover = $moveRover->move();
 
-        if(!$rover) {
+        if(!$movedRover) {
             return response()->json(['message' => 'Please send commands that do not exceed plateau borders'], 400);
         }
 
         $data =[];
-        $data['x'] = $rover['x'];
-        $data['y'] = $rover['y'];
-        $data['heading'] = $rover['heading'];
+        $data['x'] = $movedRover['x'];
+        $data['y'] = $movedRover['y'];
+        $data['heading'] = $movedRover['heading'];
 
-        $newrover->updateRover($id, $data);
+        $this->rover->updateRover($id, $data);
 
-        $rover = $newrover->getRoverState($id);
 
-        return response()->json($rover, 200);
+        return response()->json($data, 200);
 
     }
 }
