@@ -10,11 +10,6 @@ class PlateauApiClientTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     *
-     *
-     * @return void
-     */
     public function test_create_plateau()
     {
 
@@ -36,12 +31,8 @@ class PlateauApiClientTest extends TestCase
         return $response["data"]["id"];
     }
 
-    /**
-     *
-     *
-     * @return void
-     */
-    public function test_get_spesific_plateau()
+
+    public function test_get_specific_plateau()
     {
 
         $id = $this->create_plateau();
@@ -51,6 +42,39 @@ class PlateauApiClientTest extends TestCase
             ->assertStatus(200)
             ->assertJsonFragment([
                 'id' => $id,
+            ]);
+    }
+
+    public function test_check_not_found_plateau()
+    {
+        $response = $this->getJson('/api/v1/plateau/0');
+
+        $response
+            ->assertStatus(404)
+            ->assertJsonFragment([
+                "message" => "Plateau not found"
+            ]);
+    }
+
+    public function test_check_required_field()
+    {
+        $response = $this->postJson('/api/v1/plateau', ['y' => 30]);
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonFragment([
+                "The x field is required."
+            ]);
+    }
+
+    public function test_check_numeric_value()
+    {
+        $response = $this->postJson('/api/v1/plateau', ['x' => 'string', 'y' => 30]);
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonFragment([
+                "The x must be a number."
             ]);
     }
 }

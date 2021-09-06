@@ -39,24 +39,18 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        
-        $this->reportable(function (NotFoundHttpException $e) {
 
-            return response()->json([
-                'message' => 'Record not found.'
-            ], 404);
-            
-        });
+
 
         $this->renderable(function (NotFoundHttpException $e, Request $request) {
                 return response()->json([
                     'message' => 'Record not found.'
                 ], 404);
-           
+
         });
 
-        
+
     }
 
-    
+
 }

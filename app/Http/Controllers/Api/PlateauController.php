@@ -23,7 +23,7 @@ class PlateauController extends Controller
         $plateauData = $request->only('x', 'y');
 
 
-       
+
         $newPlateau = $this->plateau->createPlateau($plateauData);
 
         return response()->json([
@@ -37,7 +37,7 @@ class PlateauController extends Controller
     public function getPlateau($id) {
 
         $currentPlateau = $this->plateau->getPlateau($id);
-        
+
 
         if(count($currentPlateau) > 0) {
             return response()->json($currentPlateau, 200);
